@@ -1,0 +1,17 @@
+server:
+  port: 9090  
+spring:
+  application:
+    name: agenda-api
+    
+#DATA
+  jpa:
+    generate-ddl: true
+  datasource:
+    url: jdbc:mysql-test:3306/agenda
+    username: root
+    password: root
+    
+    
+
+ 

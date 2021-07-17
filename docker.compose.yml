@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  mysql-docker-container:
+    image: mysql:latest
+    environment:
+      – MYSQL_ROOT_PASSWORD=root123
+      – MYSQL_DATABASE=agenda
+      – MYSQL_USER=app_user
+      – MYSQL_PASSWORD=test123
+    volumes:
+      – /data/mysql
+  agenda-api-app:
+    image: agenda-api-image
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    depends_on:
+      – mysql-docker-container
+    ports:
+      – 8086:8080
+    volumes:
+      – /data/agenda-api-app
