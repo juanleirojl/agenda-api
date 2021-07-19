@@ -1,6 +1,7 @@
 plugins {
 	id 'org.springframework.boot' version '2.5.2'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'com.bmuschko.docker-spring-boot-application' version '7.0.1'
 	id 'java'
 }
 
@@ -31,6 +32,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	implementation 'org.springdoc:springdoc-openapi-ui:1.5.3'
+	implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.0'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'

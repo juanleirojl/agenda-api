@@ -1,6 +1,6 @@
-package com.bnext.agenda.config;
+package com.bnext.agenda.data.model;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
@@ -17,26 +17,27 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
-//@SuperBuilder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
-	
+	//0HOmMaRAmpp918HRfZbEld8xZROUJF2LU5fD37F3CIp2Vfj5
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@CreatedDate
-	@Column(name="created_date", updatable = false, nullable = false)
-	private Instant createdDate;
+	@Column(name="created_date",nullable = false, updatable = false)
+	private LocalDateTime createdDate;
 	
 	@LastModifiedDate
 	@Column(name="modified_date")
-	private Instant modifiedDate;
+	private LocalDateTime modifiedDate;
 	
 	@Version
 	private Integer version;
