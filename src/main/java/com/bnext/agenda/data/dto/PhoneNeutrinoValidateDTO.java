@@ -1,6 +1,6 @@
 package com.bnext.agenda.data.dto;
 
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,12 +12,13 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false, exclude = {"contacts"})
-public class UserDTO extends BaseDTO {
+@EqualsAndHashCode(callSuper = false)
+public class PhoneNeutrinoValidateDTO {
 
-	private String name;
-	private String lastName;
-	private String phone;
-	private Set<ContactDTO> contacts;
+	private boolean valid;
+	private String country;
+	
+	@JsonProperty("country-code")
+	private String countryCode;
 
 }

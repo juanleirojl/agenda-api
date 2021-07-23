@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @Data
@@ -19,23 +18,18 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ToString(callSuper = true)
-public class UserCreateDTO {
-
+public class ContactCreateDTO{
+	
 	@Schema(description = "Name of the user.", example = "Paulo", required = true)
 	@JsonProperty(required = true)
 	@NotBlank
-	private String name;
-
-	@Schema(description = "Last name of the user.", example = "do Fardan", required = true)
-	@JsonProperty(required = true)
-	@NotBlank
-	private String lastName;
-
+	private String contactName;
+	
 	@Schema(description = "Phone of the user.", example = "643172637", required = true)
 	@Pattern(regexp = "^\\+?[0-9. ()-]{7,25}$", message = "Phone number")
 	@JsonProperty(required = true)
 	@NotBlank
-	@Size(min = 9, max = 12)
+	@Size(min = 9, max = 10)
 	private String phone;
+	
 }

@@ -1,0 +1,1 @@
+INSERT INTO agenda.users (id,last_name,name,phone,created_date,modified_date,version) values (1,'Rodolfo','Rodriguez',"643172637",now(),now(),0);

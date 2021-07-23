@@ -1,0 +1,10 @@
+CREATE TABLE users (
+  id bigint NOT NULL AUTO_INCREMENT,
+  last_name varchar(255) NOT NULL ,
+  name varchar(255) NOT NULL,
+  phone varchar(255) NOT NULL,
+  created_date datetime(6) NOT NULL,
+  modified_date datetime(6) DEFAULT NULL,
+  version int DEFAULT 0,
+  PRIMARY KEY (id)
+);

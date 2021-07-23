@@ -1,0 +1,16 @@
+server:
+  servlet:
+    context-path: /api
+    
+spring:  datasource:
+    url: jdbc:tc:mysql:8.0:///agendatest
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:    hibernate:      ddl-auto: none
+    show-sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+  jackson:    serialization:      fail-on-empty-beans: false
+        flyway:    enabled: true
+    validate-migration-naming: true

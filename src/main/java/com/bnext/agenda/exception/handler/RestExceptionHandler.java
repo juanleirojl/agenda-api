@@ -27,6 +27,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.bnext.agenda.exception.BusinessException;
+import com.bnext.agenda.exception.ResourceAlreadyExist;
 import com.bnext.agenda.exception.ResourceNotFoundException;
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
@@ -81,18 +82,33 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 			return Error.Detail.builder().name(name).userMessage(message).build();
 		}).collect(Collectors.toList());
 
-		Error erro = createErroBuilder(ex,status, errorType, detail).userMessage(detail).errors(erroObjects).build();
+		ServletWebRequest webRequest = ((ServletWebRequest)request);
+		
+		Error erro = createErroBuilder(ex,status, errorType, detail,webRequest).userMessage(detail).errors(erroObjects).build();
 		return handleExceptionInternal(ex, erro, headers, status, request);
 	}
 
+	@ExceptionHandler(ResourceAlreadyExist.class)
+	public ResponseEntity<Object> handleUncaught(ResourceAlreadyExist ex, WebRequest request) {
+		HttpStatus status = HttpStatus.CONFLICT;
+		ErrorType errorType = ErrorType.ENTITY_ALREADY_EXIST;
+		String detailUser = "Resource already exist";
+		String detail = ex.getMessage();
+
+		ServletWebRequest webRequest = ((ServletWebRequest)request);
+		Error erro = createErroBuilder(ex, status, errorType,detail,webRequest).userMessage(detailUser).build();
+		return handleExceptionInternal(ex, erro, new HttpHeaders(), status, request);
+	}
+	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleUncaught(Exception ex, WebRequest request) {
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 		ErrorType errorType = ErrorType.SYSTEM_ERROR;
 		String detailUser = MSG_ERROR_GENERIC_USER_FINAL;
-		String detail = ex.getStackTrace()[0]!=null ? ex.getStackTrace()[0].toString() : detailUser;
+		String detail = ex.getCause()!=null && ex.getCause().getCause()!=null ? ex.getCause().getCause().getMessage() : ex.getStackTrace()[0]!=null ? ex.getStackTrace()[0].toString() : detailUser;
 
-		Error erro = createErroBuilder(ex, status, errorType,detail).userMessage(detailUser).build();
+		ServletWebRequest webRequest = ((ServletWebRequest)request);
+		Error erro = createErroBuilder(ex, status, errorType,detail,webRequest).userMessage(detailUser).build();
 		return handleExceptionInternal(ex, erro, new HttpHeaders(), status, request);
 	}
 
@@ -103,7 +119,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		ErrorType errorType = ErrorType.RESOURCE_NOT_FOUND;
 		String detail = String.format("Resource  %s doesn't exist", ex.getRequestURL());
 
-		Error erro = createErroBuilder(ex, status, errorType, detail).userMessage(MSG_ERROR_GENERIC_USER_FINAL).build();
+		ServletWebRequest webRequest = ((ServletWebRequest)request);
+		Error erro = createErroBuilder(ex, status, errorType, detail,webRequest).userMessage(MSG_ERROR_GENERIC_USER_FINAL).build();
 		return handleExceptionInternal(ex, erro, headers, status, request);
 	}
 
@@ -127,7 +144,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 						+ "that is a invalid type. Fix and enter a compatible with type %s.",
 				ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName());
 
-		Error erro = createErroBuilder(ex, status, errorType, detail).userMessage(MSG_ERROR_GENERIC_USER_FINAL).build();
+		ServletWebRequest webRequest = ((ServletWebRequest)request);
+		Error erro = createErroBuilder(ex, status, errorType, detail,webRequest).userMessage(MSG_ERROR_GENERIC_USER_FINAL).build();
 		return handleExceptionInternal(ex, erro, headers, status, request);
 	}
 
@@ -145,7 +163,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		ErrorType errorType = ErrorType.INCOMPREHENSIBLE_MESSAGE;
 		String detail = "Request body is invalid. Check syntax error.";
 
-		Error erro = createErroBuilder(ex, status, errorType, detail).userMessage(MSG_ERROR_GENERIC_USER_FINAL).build();
+		ServletWebRequest webRequest = ((ServletWebRequest)request);
+		Error erro = createErroBuilder(ex, status, errorType, detail,webRequest).userMessage(MSG_ERROR_GENERIC_USER_FINAL).build();
 		return handleExceptionInternal(ex, erro, headers, status, request);
 	}
 
@@ -158,7 +177,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		String detail = String.format(
 				"Field '%s' doesn't exist. Fix or remove the field and try again.", path);
 
-		Error erro = createErroBuilder(ex, status, errorType, detail).userMessage(MSG_ERROR_GENERIC_USER_FINAL).build();
+		ServletWebRequest webRequest = ((ServletWebRequest)request);
+		Error erro = createErroBuilder(ex, status, errorType, detail,webRequest).userMessage(MSG_ERROR_GENERIC_USER_FINAL).build();
 		return handleExceptionInternal(ex, erro, headers, status, request);
 	}
 
@@ -173,7 +193,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 						+ "is a invalid type. Fix with a compatible value %s.",
 				path, ex.getValue(), ex.getTargetType().getSimpleName());
 
-		Error erro = createErroBuilder(ex, status, errorType, detail).userMessage(MSG_ERROR_GENERIC_USER_FINAL).build();
+		ServletWebRequest webRequest = ((ServletWebRequest)request);
+		Error erro = createErroBuilder(ex, status, errorType, detail,webRequest).userMessage(MSG_ERROR_GENERIC_USER_FINAL).build();
 		return handleExceptionInternal(ex, erro, headers, status, request);
 	}
 
@@ -184,7 +205,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		ErrorType errorType = ErrorType.RESOURCE_NOT_FOUND;
 		String detail = ex.getMessage();
 
-		Error erro = createErroBuilder(ex, status, errorType, detail).userMessage(detail).build();
+		ServletWebRequest webRequest = ((ServletWebRequest)request);
+		Error erro = createErroBuilder(ex, status, errorType, detail,webRequest).userMessage(detail).build();
 		return handleExceptionInternal(ex, erro, new HttpHeaders(), status, request);
 	}
 
@@ -196,7 +218,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		ErrorType errorType = ErrorType.BUSINESS_EXCEPTION_VIOLATION;
 		String detail = ex.getMessage();
 
-		Error erro = createErroBuilder(ex, status, errorType, detail).userMessage(detail).build();
+		ServletWebRequest webRequest = ((ServletWebRequest)request);
+		Error erro = createErroBuilder(ex, status, errorType, detail,webRequest).userMessage(detail).build();
 		return handleExceptionInternal(ex, erro, new HttpHeaders(), status, request);
 	}
 
@@ -221,9 +244,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		return super.handleExceptionInternal(ex, body, headers, status, request);
 	}
 
-	private Error.ErrorBuilder createErroBuilder(Exception ex, HttpStatus status, ErrorType errorType, String detail) {
+	private Error.ErrorBuilder createErroBuilder(Exception ex, HttpStatus status, ErrorType errorType, String detail, ServletWebRequest webRequest) {
 
+		String path = webRequest.getRequest().getRequestURI()!=null ? webRequest.getRequest().getRequestURI().toString() : "";
 		return Error.builder().timestamp(Instant.now()).status(status.value()).type(ex.getClass().getSimpleName())
+				.path(path)
 				.title(errorType.getTitle()).detail(detail);
 	}
 

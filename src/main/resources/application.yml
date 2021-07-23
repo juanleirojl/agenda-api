@@ -1,5 +1,7 @@
 server:
-  port: 8080  
+  port: 8080 
+  servlet:
+    context-path: /api 
 spring:
   application:
     name: agenda-api
@@ -9,16 +11,52 @@ spring:
     generate-ddl: true
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
   datasource:
     url: jdbc:mysql://localhost:3306/agenda
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
-    
 #jacskon
   jackson:
     default-property-inclusion: non-null
+  flyway:
+    enabled: true
+    validate-on-migrate: true
+    schemas:
+    - agenda
+    
+management:
+  endpoint:
+    beans:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include:
+        - '*' 
+    
+    
+neutrino:
+  api:
+    baseUrl: https://neutrinoapi.net
+    api-key: 0HOmMaRAmpp918HRfZbEld8xZROUJF2LU5fD37F3CIp2Vfj5
+    user-id: juanleiro
+    
+logging:
+  level:
+    com.bnext.agenda.client.NeutrinoClient: DEBUG
+    
+feign:
+  client:
+    config:
+      default:
+        error-decoder: com.bnext.agenda.config.feign.FeignClientErrorDecoder 
+        connectTimeout: 6000
+        readTimeout: 1000
+        loggerLevel: basic
     
     
     

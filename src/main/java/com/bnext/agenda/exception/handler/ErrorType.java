@@ -11,7 +11,7 @@ public enum ErrorType {
 	INVALID_PARAMETER("Invalid Parameter"),
 	INCOMPREHENSIBLE_MESSAGE("Incomprehensible message"),
 	RESOURCE_NOT_FOUND("Resource not found"),
-	ENTIDADE_EM_USO("Entity in use"),
+	ENTITY_ALREADY_EXIST("Entity already exist"),
 	BUSINESS_EXCEPTION_VIOLATION("Business exception violation");
 	
 	private String title;

@@ -1,0 +1,12 @@
+CREATE TABLE contacts (
+  id bigint NOT NULL AUTO_INCREMENT,
+  contact_name varchar(255) NOT NULL,
+  phone varchar(255) NOT NULL,
+  user_id bigint NOT NULL,
+  created_date datetime(6) NOT NULL,
+  modified_date datetime(6) DEFAULT NULL,
+  version int DEFAULT NULL,
+  PRIMARY KEY (id),
+  KEY user_fk (user_id),
+  CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES users (id)
+);

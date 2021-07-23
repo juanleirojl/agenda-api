@@ -17,6 +17,7 @@ public class Error {
 	private Instant timestamp;
 	private String type;
 	private String title;
+	private String path;
 	private String detail;
 	private String userMessage;
 	private List<Detail> errors;
